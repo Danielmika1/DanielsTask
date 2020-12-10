@@ -1,0 +1,4 @@
+numpy==1.19.3
+matplotlib
+h5py
+mpl_toolkits
