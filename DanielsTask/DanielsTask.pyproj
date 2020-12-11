@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>68100698-70b6-4c17-a645-9170acdfe945</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>tichonet_DL5_2430.py</StartupFile>
+    <StartupFile>mainnnn.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -24,8 +24,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="targil2.py" />
-    <Compile Include="DanielsTask.py" />
-    <Compile Include="tichonet_DL5_2430.py">
+    <Compile Include="targil1.py" />
+    <Compile Include="targil1old.py" />
+    <Compile Include="mainnnn.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="unit10\b_utils.py" />

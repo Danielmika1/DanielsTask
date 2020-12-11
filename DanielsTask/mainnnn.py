@@ -7,6 +7,11 @@ from mpl_toolkits import mplot3d
 random.seed(1)
 X, Y = u10. load_dataB1W3Ex2()
 
+
+def func_etgar1(x):
+    return -1.2(x**5) + 31.2(x**4) - 150(x**3) + 1320(x**2) - 31200*x + (150000 - (120000/x))
+
+
 aLst = []
 bLst = []
 cLst = []
