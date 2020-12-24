@@ -25,9 +25,11 @@ indexMin = -1
 min = 0
 
 for l in range(len(aLst)):
+
     sum = 0.0
     for i in range(len(Y)):
         sum += (Guess(X[0][i], X[1][i], aLst[l], bLst[l], cLst[l], dLst[l])-Y[i])**2
+
     if(indexMin == -1):
         min = sum/len(Y)
         indexMin = l

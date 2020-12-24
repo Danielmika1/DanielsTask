@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>68100698-70b6-4c17-a645-9170acdfe945</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>mainnnn.py</StartupFile>
+    <StartupFile>targil2.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,6 +23,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="learningarte1.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="targil2.py" />
     <Compile Include="targil1.py" />
     <Compile Include="targil1old.py" />
