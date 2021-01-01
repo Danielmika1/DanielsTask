@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>68100698-70b6-4c17-a645-9170acdfe945</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>targil2.py</StartupFile>
+    <StartupFile>tast1alg.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,8 +23,15 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="learningarte1.py">
+    <Compile Include="2350targil2.py">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tast1alg.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="\\mac\Home\Documents\מחשבים\2350targil3.txt">
+      <SubType>Code</SubType>
+      <Link>2350targil3.txt</Link>
     </Compile>
     <Compile Include="targil2.py" />
     <Compile Include="targil1.py" />
