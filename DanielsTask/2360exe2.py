@@ -5,14 +5,27 @@ import random
 random.seed(5) 
 
 def f_function (x):
-    Fx = 1.1*x**2-7*x+6
-    Fdx = 2.2*x-7
+    Fx = (2*x + 1) * 2
+    Fdx = 8*x + 4
     return Fx, Fdx
 
-def g_function (a):
-    Gx = (a**2-9)/(4**a)
-    Gdx = ((2**(2*a+1)*a-np.log(2)*2**(2*a+1)*(a**2-9)))/(16**a)
+def g_function (x, a=3, b=5):
+    Gx = (2*x - a) * 2 + (3*x - b) * 2
+    Gdx = 4*(2*x - a) + 6 * (3*x - b)
     return Gx, Gdx
+
+def k_function (a, m=10):
+    sum_Kx = 0
+    sum_Kdx = 0
+
+    for i in range(1, m + 1):
+        sum_Kx += (a - i)**2
+        sum_Kdx += 2 * (a - i)
+
+    Kx = sum_Kx / m
+    Kdx = sum_Kdx / m 
+
+    return Kx, Kdx
 
 def train_min(alpha, epocs, MyFunc):
 
@@ -28,15 +41,13 @@ def train_min(alpha, epocs, MyFunc):
         else:
             alpha = alpha * 1.1
 
-
-
         if (Fdx>0):
             xmin -= Fdx*alpha
         else:
             xmin += Fdx*alpha
     Fx, Fdx = MyFunc(xmin)
 
-    return xmin, Fx, Fdx
+    return xmin
 
 
 def train_max(alpha, epocs, MyFunc):
@@ -63,4 +74,6 @@ def train_max(alpha, epocs, MyFunc):
 
 
 print("MIN INFO: ", train_min(0.001, 1000, f_function)) 
-print("MIN INFO: ", train_min(0.001, 1000, g_function), "MAX INFO: ", train_max(0.001, 1000, g_function))
+print("MIN INFO: ", train_min(0.001, 1000, g_function))
+print("MIN INFO: ", train_min(0.001, 1000, k_function))
+
