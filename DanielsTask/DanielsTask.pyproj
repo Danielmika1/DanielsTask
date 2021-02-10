@@ -39,7 +39,6 @@
     </Compile>
     <Compile Include="3030exe2.py" />
     <Compile Include="3030exe1mine.py" />
-    <Compile Include="3030exegad.py" />
     <Compile Include="2380exe3.py" />
     <Compile Include="2380exe1GAD.py">
       <SubType>Code</SubType>
