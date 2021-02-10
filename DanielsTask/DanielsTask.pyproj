@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>68100698-70b6-4c17-a645-9170acdfe945</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>3030exe2.py</StartupFile>
+    <StartupFile>3030exe1to4.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -37,8 +37,8 @@
     <Compile Include="2380exe1.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="3030exe2.py" />
-    <Compile Include="3030exe1mine.py" />
+    <Compile Include="3030exe1to4.py" />
+    <Compile Include="3030exegad.py" />
     <Compile Include="2380exe3.py" />
     <Compile Include="2380exe1GAD.py">
       <SubType>Code</SubType>
