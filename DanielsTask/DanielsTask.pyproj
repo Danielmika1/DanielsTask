@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>68100698-70b6-4c17-a645-9170acdfe945</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>3030exe1to4.py</StartupFile>
+    <StartupFile>3040exe3.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -37,13 +37,21 @@
     <Compile Include="2380exe1.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="3030exe1to4.py" />
+    <Compile Include="3030exe1to6.py" />
+    <Compile Include="3040exe3.py" />
+    <Compile Include="MyVectorr.py" />
     <Compile Include="3030exegad.py" />
     <Compile Include="2380exe3.py" />
     <Compile Include="2380exe1GAD.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="2380exe2.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="3040main.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="3040exe2.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="\\mac\Home\Documents\מחשבים\2350targil3.txt">
