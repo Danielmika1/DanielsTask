@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>68100698-70b6-4c17-a645-9170acdfe945</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>3130exe1example.py</StartupFile>
+    <StartupFile>PerspetronClass.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -61,6 +61,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="3050exe1.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PerspetronClass.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="\\mac\Home\Documents\מחשבים\2350targil3.txt">
