@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>68100698-70b6-4c17-a645-9170acdfe945</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>PerspetronClass.py</StartupFile>
+    <StartupFile>DL1.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -45,6 +45,9 @@
     <Compile Include="3130exe1example.py" />
     <Compile Include="3050exe3.py" />
     <Compile Include="3050exe2.py" />
+    <Compile Include="DL1.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MyVectorr.py" />
     <Compile Include="3030exegad.py" />
     <Compile Include="2380exe3.py" />

@@ -7,7 +7,6 @@ import os
 from PIL import Image
 import time
 
-
 class MyPerceptron(object):
     def __init__ (self, X , Y):
         self.X = X
@@ -105,9 +104,9 @@ def IsCat(data1, fname):
     plt.imshow(img)
     my_image = np.array(img).reshape(1, -1).T
     my_predicted_image = Myperceptron.predict(my_image, W, b)
-    print("")
     print("y = " + str(np.squeeze(my_predicted_image)) + ", your algorithm predicts a \"" + classes[int(np.squeeze(my_predicted_image)),].decode("utf-8") +  "\" picture.")
     plt.show()
 
-IsCat(u10.load_datasetC1W2(), r'C:\Users\danielgonen\Desktop\cat3.jpg')
+#IsCat(u10.load_datasetC1W2(), r'C:\Users\danielgonen\Desktop\cat3.jpg')
+IsCat(u10.load_datasetC1W2(), r'C:\Users\danielgonen\Desktop\nipo.jpg')
 
