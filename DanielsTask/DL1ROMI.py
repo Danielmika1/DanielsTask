@@ -7,118 +7,68 @@ from unit10 import c1w2_utils as u10
 import os
 from PIL import Image
 import time
-from DL1 import *
+from DL1ROMI import *
 
 class DLLayer(object):
-    def __init__ (self, name , num_units, input_shape, activation="relu", W_initialization="random", learning_rate=1.2, optimization=None):
+    def __init__(self, name , num_units, input_shape, activation="relu", W_initialization="random", learning_rate=1.2, optimization=None):
         self.name = name
-        self.alpha = learning_rate
         self._num_units = num_units
-        self._input_shape = input_shape
-        self._activation = activation
-        self._optimization = optimization
-        self.W_initialization = W_initialization
+        self._activation= activation
+        self._input_shape=input_shape
+        self._optimization=optimization
         self.random_scale = 0.01
-        self.W, self.b = self.init_weights(W_initialization)
+        self.alpha=learning_rate
+        self.W,self.b = self.init_weights(W_initialization)
 
-        self.activation_trim = 1e-10
-        if (self._activation == "leaky_relu"):
+        self.activation_trim=1e-10
+        if(activation == "leaky_relu"):
             self.leaky_relu_d = 0.01
 
-        if (self._optimization == 'adaptive'):
+        if(self._optimization=='adaptive'):
             self._adaptive_alpha_b = np.full((self._num_units, 1), self.alpha)
             self._adaptive_alpha_W = np.full(self._get_W_shape(), self.alpha)
-            self.adaptive_cont = 1.1
-            self.adaptive_switch = 0.5
+            self.adaptive_cont=1.1
+            self.adaptive_switch =0.5
 
-        if (activation == "sigmoid"):
-            self.activation_forward = self._sigmoid
-            self.activation_backward = self._sigmoid_backward
-        if (activation == "trim_sigmoid"):
-           self.activation_forward = self._trim_sigmoid
-           self.activation_backward = self._sigmoid_backward
-        if (activation == "trim_tanh"):
-            self.activation_forward = self._trim_tanh
-            self.activation_backward = self.trim_tanh_backward
-        if (activation == "tanh"):
-            self.activation_forward = self._tanh
-            self.activation_backward = self._tanh_backward
-        if (activation == "relu"):
+        self.random_scale=0.01
+        self.init_weights(W_initialization)
+
+
+        if(activation == "relu"):
             self.activation_forward = self._relu
             self.activation_backward = self._relu_backward
-        if (activation == "leaky_relu"):
+        if(activation == "sigmoid"):
+            self.activation_forward = self._sigmoid
+            self.activation_backward = self._sigmoid_backward
+        if(activation == "trim_sigmoid"):
+            self.activation_forward = self._trim_sigmoid
+            self.activation_backward = self._sigmoid_backward
+        if(activation == "trim_tanh"):
+            self.activation_forward = self._trim_tanh
+            self.activation_backward = self._trim_tanh_backward
+        if(activation == "leaky_relu"):
             self.activation_forward = self._leaky_relu
             self.activation_backward = self._leaky_relu_backward
+        if(activation == "tanh"):
+            self.activation_forward = self._tanh
+            self.activation_backward = self._tanh_backward
+        if(optimization == "softmax"):
+            self.activation_forward = self._softmax
+            self.activation_backward = self._softmax_backward
 
-    ## activations and backwards, exe 1.2 and exe 1.4 ##
 
-    
     def _get_W_shape(self):
-        return (self._num_units, *(self._input_shape))
-    
-    def _sigmoid(self, Z):
-        A = 1/(1+np.exp(-Z))
-        return A
+        return (self._num_units, * self._input_shape)
 
-    def _sigmoid_backward(self, dA):
-        A = self._sigmoid(self._Z)
-        dZ = dA * A * (1-A)
-        return dZ
+    def init_weights(self, W_initialization):
+        self.b = np.zeros((self._num_units,1), dtype=float)
 
-    def _tanh(self, Z):
-        A = np.tanh(Z)
-        return A
+        if (W_initialization == "zeros"): 
+            self.W = np.full(self._get_W_shape(), 0)
+        elif (W_initialization == "random"):
+            self.W = np.random.randn(self._num_units, *(self._input_shape)) * self.random_scale
 
-    def _tanh_backward(self, dA):
-        A = self._tanh(self._Z)
-        dZ = dA * (1-A**2)
-        return dZ
-
-    def _relu(self, Z):
-        A = np.maximum(0,Z)
-        return A
-
-    def _relu_backward(self, dA):
-        dZ = np.where(self._Z <= 0, 0, dA)
-        return dZ
-
-    def _leaky_relu(self, Z):
-        A = np.where(Z > 0, Z, self.leaky_relu_d * Z)
-        return A
-
-    def _leaky_relu_backward(self, dA):
-        dZ = np.where(self._Z <= 0, self.leaky_relu_d * dA, dA)
-        return dZ
-    
-    def _trim_sigmoid(self,Z):
-        with np.errstate(over='raise', divide='raise'):
-            try:
-               A = 1/(1+np.exp(-Z))
-            except FloatingPointError:
-                Z = np.where(Z < -100, -100,Z)
-                A = A = 1/(1+np.exp(-Z))
-        TRIM = self.activation_trim
-        if TRIM > 0:
-            A = np.where(A < TRIM,TRIM,A)
-            A = np.where(A > 1-TRIM,1-TRIM, A)
-        return A
-
-    def _trim_sigmoid_backward(self, dA):
-        A = self._trim_sigmoid(self._Z)
-        return dZ
-
-    def _trim_tanh(self,Z):
-        A = np.tanh(Z)
-        TRIM = self.activation_trim
-        if TRIM > 0:
-            A = np.where(A < -1+TRIM,TRIM,A)
-            A = np.where(A > 1-TRIM,1-TRIM, A)
-        return A
-
-    def trim_tanh_backward(self, dA):
-        A = self.trim_tanh(self._Z)
-        dZ = dA * (1-A**2)
-        return dZ
+        return self.W, self.b
 
     def __str__(self):
         s = self.name + " Layer:\n"
@@ -141,16 +91,72 @@ class DLLayer(object):
         plt.title("W histogram")
         plt.show()
         return s
-   
-    def init_weights(self, W_initialization):
-        self.b = np.zeros((self._num_units,1), dtype=float)
 
-        if (W_initialization == "zeros"): 
-            self.W = np.full(self._get_W_shape(), 0)
-        elif (W_initialization == "random"):
-            self.W = np.random.randn(self._num_units, *(self._input_shape)) * self.random_scale
 
-        return self.W, self.b
+    def _sigmoid(self,Z):
+        A=1/(1+np.exp(-Z))
+        return A
+    def _sigmoid_backward(self,dA):
+        A= self._sigmoid(self._Z)
+        dZ= dA*A*(1-A)
+        return dZ
+
+    def _trim_sigmoid(self,Z):
+        with np.errstate(over='raise', divide='raise'):
+            try:
+               A = 1/(1+np.exp(-Z))
+            except FloatingPointError:
+                Z = np.where(Z < -100, -100,Z)
+                A = A = 1/(1+np.exp(-Z))
+        TRIM = self.activation_trim
+        if TRIM > 0:
+            A = np.where(A < TRIM,TRIM,A)
+            A = np.where(A > 1-TRIM,1-TRIM, A)
+        return A
+
+ 
+    def _trim_sigmoid_backward(self,dA):
+        A= self._trim_sigmoid(self._Z)
+        dZ= dA*A*(1-A)
+        return dZ
+
+    def _relu(self,Z):
+        A=np.maximum(0,Z)
+        return A
+
+    def _relu_backward(self,dA):
+        dZ=np.where(self._Z<=0,0,dA)
+        return dZ
+
+    def _leaky_relu(self,Z):
+        A=np.where(Z>0,Z,self.leaky_relu_d*Z)
+        return A
+
+    def _leaky_relu_backward(self,dA):
+        dZ= np.where(self._Z<=0,self.leaky_relu_d * dA, dA)
+        return dZ
+
+    def _tanh(self,Z):
+        A = np.tanh(Z)
+        return A
+
+    def _tanh_backward(self,dA):
+        A= np.tanh(self._Z)
+        dZ=dA*(1-A**2)
+        return dZ
+
+    def _trim_tanh(self,Z):
+        A = np.tanh(Z)
+        TRIM = self.activation_trim
+        if TRIM > 0:
+            A = np.where(A < -1+TRIM,TRIM,A)
+            A = np.where(A > 1-TRIM,1-TRIM, A)
+        return A
+    def trim_tanh_backward(self, dA):
+        A = self.trim_tanh(self._Z)
+        dZ = dA * (1-A*2)
+        return dZ
+
 
     def forward_propagation(self, A_prev, is_predict):
         self._A_prev = np.array(A_prev, copy=True)
@@ -168,20 +174,13 @@ class DLLayer(object):
         return dA_Prev
 
     def update_parameters(self):
-        if (self._optimization == 'adaptive'):
+        self.W, self.b = self.dW * self.alpha, self.db * self.alpha
+        if (self._optimization == "adaptive"):
             self._adaptive_alpha_W *= np.where(self._adaptive_alpha_W * self.dW > 0, self.adaptive_cont, -self.adaptive_switch)
             self._adaptive_alpha_b *= np.where(self._adaptive_alpha_b * self.db > 0, self.adaptive_cont, -self.adaptive_switch)
-            self.W, self.b = -self._adaptive_alpha_W, -self._adaptive_alpha_b
-        if (self._optimization == None):
-            self.W, self.b = -self.dW * self.alpha, -self.db * self.alpha
-
+            self.W, self.b = self.W * self._adaptive_alpha_W, self.b * self._adaptive_alpha_b
         return self.W, self.b
 
-
-
-###--------------------------------------###
-###-------------- cheacking -------------###
-###--------------------------------------###
 
 
 # 1.1 

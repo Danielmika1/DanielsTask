@@ -45,6 +45,7 @@
     <Compile Include="3130exe1example.py" />
     <Compile Include="3050exe3.py" />
     <Compile Include="3050exe2.py" />
+    <Compile Include="DL1ROMI.py" />
     <Compile Include="DL1.py">
       <SubType>Code</SubType>
     </Compile>
