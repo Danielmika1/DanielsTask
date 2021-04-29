@@ -7,7 +7,6 @@ from unit10 import c1w2_utils as u10
 import os
 from PIL import Image
 import time
-from DL1 import *
 
 class DLLayer(object):
     def __init__ (self, name , num_units, input_shape, activation="relu", W_initialization="random", learning_rate=1.2, optimization=None):
@@ -189,10 +188,10 @@ class DLModel(object):
         self.layers.append(layer)
 
     def _squared_means(self, AL, Y):
-        return np.square(AL) - np.square(Y)
+        return np.square(AL - Y)
 
     def squared_means_backward(self, AL, Y):
-        dAL = 2 * AL - Y
+        dAL = 2 * (AL - Y)
         return dAL
 
     def cross_entropy(self, AL, Y):
@@ -213,6 +212,56 @@ class DLModel(object):
             self.loss_backward = self.squared_means_backward
         self.threshold = threshold
         self._is_compiled = True
+
+    def compute_cost(self, AL, Y):
+        m = AL.shape[1]
+        errors = self.loss_forward(AL, Y)
+        return np.sum(errors) / m
+
+    def train(self, X, Y, num_iterations):
+        print_ind = max(num_iterations // 100, 1)
+        L = len(self.layers)
+        costs = []
+        for i in range(num_iterations):
+            # forward propagation
+            Al = X
+            for l in range(1,L):
+                Al = self.layers[l].forward_propagation(Al,False)            
+            #backward propagation
+            dAl = self.loss_backward(Al, Y)
+            for l in reversed(range(1,L)):
+                dAl = self.layers[l].backward_propagation(dAl)
+                # update parameters
+                self.layers[l].update_parameters()
+            #record progress
+            if i > 0 and i % print_ind == 0:
+                J = self.compute_cost(Al, Y)
+                costs.append(J)
+                print("cost after ",str(i//print_ind),"%:",str(J))
+        return costs
+
+    def predict(self, X):
+        L = len(self.layers)
+        result = []
+        # forward propagation
+        Al = X
+        for l in range(1,L):
+            Al = self.layers[l].forward_propagation(Al,True)  
+            result.append(Al)
+        result = np.where(result[len(result) - 1] > self.threshold, True, False)
+        return result
+
+    def __str__(self):
+        s = self.name + " description:\n\tnum_layers: " + str(len(self.layers)-1) + "\n"
+        if self._is_compiled:
+            s += "\tCompilation parameters:\n"
+            s += "\t\tprediction threshold: " + str(self.threshold) +"\n"
+            s += "\t\tloss function: " + self.loss + "\n\n"
+
+        for i in range(1,len(self.layers)):
+            s += "\tLayer " + str(i) + ":" + str(self.layers[i]) + "\n"
+
+        return s
 
 
 ###--------------------------------------###
@@ -316,3 +365,24 @@ errors = m2.loss_forward(AL,Y)
 dAL = m2.loss_backward(AL,Y)
 print("squared means error:\n",errors)
 print("squared means dAL:\n",dAL)
+
+## 2.4
+
+print("cost m1:", m1.compute_cost(AL,Y))
+print("cost m2:", m2.compute_cost(AL,Y))
+
+## 2.5
+
+np.random.seed(1)
+model = DLModel();
+model.add(DLLayer("Perseptrons 1", 10,(12288,)))
+model.add(DLLayer("Perseptrons 2", 1,(10,),"trim_sigmoid"))
+model.compile("cross_entropy", 0.7)
+X = np.random.randn(12288,10) * 256
+print("predict:",model.predict(X))
+
+## 2.6
+
+print(model)
+
+
