@@ -171,12 +171,48 @@ class DLLayer(object):
         if (self._optimization == 'adaptive'):
             self._adaptive_alpha_W *= np.where(self._adaptive_alpha_W * self.dW > 0, self.adaptive_cont, -self.adaptive_switch)
             self._adaptive_alpha_b *= np.where(self._adaptive_alpha_b * self.db > 0, self.adaptive_cont, -self.adaptive_switch)
-            self.W, self.b = -self._adaptive_alpha_W, -self._adaptive_alpha_b
+            self.b -= self._adaptive_alpha_b
+            self.W = self.W - self._adaptive_alpha_W
         if (self._optimization == None):
-            self.W, self.b = -self.dW * self.alpha, -self.db * self.alpha
+            self.W -= self.dW * self.alpha
+            self.b -= self.db * self.alpha
 
         return self.W, self.b
 
+class DLModel(object):
+    def __init__(self, name="Model"):
+        self.name = name
+        self.layers = [None]
+        self._is_compiled = False
+
+    def add(self, layer):
+        self.layers.append(layer)
+
+    def _squared_means(self, AL, Y):
+        return np.square(AL) - np.square(Y)
+
+    def squared_means_backward(self, AL, Y):
+        dAL = 2 * AL - Y
+        return dAL
+
+    def cross_entropy(self, AL, Y):
+        error = np.where(Y == 0, -np.log(1 - AL), -np.log(AL))
+        return error
+
+    def cross_entropy_backward(self, AL, Y):
+        dAL = np.where(Y == 0, 1/(1-AL), -1/AL)
+        return dAL
+
+    def compile(self, loss, threshold=0.5):
+        self.loss = loss
+        if (self.loss == "cross_entropy"):
+            self.loss_forward = self.cross_entropy
+            self.loss_backward = self.cross_entropy_backward
+        if (self.loss == "squared_means"):
+            self.loss_forward = self._squared_means
+            self.loss_backward = self.squared_means_backward
+        self.threshold = threshold
+        self._is_compiled = True
 
 
 ###--------------------------------------###
@@ -184,8 +220,7 @@ class DLLayer(object):
 ###--------------------------------------###
 
 
-# 1.1 
-
+"""
 np.random.seed(1)
 
 l = [None]
@@ -259,3 +294,25 @@ l1.update_parameters()
 l2.update_parameters()
 print("after update:W1\n"+str(l1.W)+"\nb1.T:\n"+str(l1.b.T))
 print("W2\n"+str(l2.W)+"\nb2.T:\n"+str(l2.b.T))
+
+"""
+
+### -------- DLMODEL CHECKING ------- ###
+
+## 2.3
+
+np.random.seed(1)
+m1 = DLModel()
+AL = np.random.rand(4,3)
+Y = np.random.rand(4,3) > 0.7
+m1.compile("cross_entropy")
+errors = m1.loss_forward(AL,Y)
+dAL = m1.loss_backward(AL,Y)
+print("cross entropy error:\n",errors)
+print("cross entropy dAL:\n",dAL)
+m2 = DLModel()
+m2.compile("squared_means")
+errors = m2.loss_forward(AL,Y)
+dAL = m2.loss_backward(AL,Y)
+print("squared means error:\n",errors)
+print("squared means dAL:\n",dAL)
