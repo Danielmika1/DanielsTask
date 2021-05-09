@@ -249,7 +249,7 @@ class DLModel(object):
             Al = self.layers[l].forward_propagation(Al,True)  
             result.append(Al)
         result = np.where(result[len(result) - 1] > self.threshold, True, False)
-        return result
+        return result 
 
     def __str__(self):
         s = self.name + " description:\n\tnum_layers: " + str(len(self.layers)-1) + "\n"

@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>68100698-70b6-4c17-a645-9170acdfe945</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>DL1.py</StartupFile>
+    <StartupFile>TextDL1.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -45,6 +45,8 @@
     <Compile Include="3130exe1example.py" />
     <Compile Include="3050exe3.py" />
     <Compile Include="3050exe2.py" />
+    <Compile Include="TextDL1.py" />
+    <Compile Include="GadsDL.py" />
     <Compile Include="DL1ROMI.py" />
     <Compile Include="DL1.py">
       <SubType>Code</SubType>
